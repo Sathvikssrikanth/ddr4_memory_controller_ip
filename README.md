@@ -7,7 +7,7 @@ The DDR4 controller has been designed with a set of hardware and functional spec
 • Target Clock frequency: 100 MHz [Max: 1.8 GHz]
 
 • User Data Bus width: 8 bits
-• User Address width: 32 bits
+User Address width: 32 bits
 • Designed to access a 2 GB DRAM Memory (2 Bank Groups, 4 Banks each)
 • Controller designed for x16 configuration of DDR4 DRAM Memory (16-bit DQ)
 • 16-bit Read/Write DQ Bus implemented
