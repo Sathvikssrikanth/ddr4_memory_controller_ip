@@ -1,4 +1,4 @@
-# ddr4_memory_controller_ip
+# DDR4 Memory Controller IP 
 
 ## Technical Specification :
 The DDR4 controller has been designed with a set of hardware and functional specifications that govern its speed, interface configuration, memory addressing, and error handling capabilities. These parameters ensure correct operation with the targeted DDR4 DRAM device and optimal system performance.
