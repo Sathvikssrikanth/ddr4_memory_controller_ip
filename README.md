@@ -16,11 +16,13 @@ The DDR4 controller has been designed with a set of hardware and functional spec
 - Periodic Memory Refresh performed to maintain DRAM data integrity (Entire memory refreshed at once)
 - As per DDR4 Specification, to support dual data rate, the controller should work on differential clock inputs (CK t, CK c). But, we have implemented a high level DDR4 Memory Controller (commands, timing, refresh, ECC) and considered a single clock for the ease of implementation.
 
+---
 
 ## Block Diagram
 
 ![Architecture](images/Main-Block-Diagram.png)
 
+---
 
 ## Top Module Ports
 
@@ -44,19 +46,48 @@ The DDR4 controller has been designed with a set of hardware and functional spec
 | ecc_double_err | 1 | output | ECC double error detection |
 | ecc_corrected | 1 | output | ECC single error corrected |
 
+---
 
 ## Verilog Modules Flow
 
 ![Architecture](images/DDR4_Memory.drawio.png)
 
-## RTL Simulation Waveform
+---
 
-![Architecture](images/DDR4_Memory.drawio.png)
+## RTL Simulation
+
+The DDR4 Memory Controller testbench is designed to verify the correctness of the ECC-enabled read and write operations. The following test cases were performed:
+
+### Write Operation
+
+A standard write transaction is performed, where the controller generates the corresponding Hamming (13,8) ECC bits for the input data before storing it in DRAM.
+
+- **Input Data:** `8'hAA`
+- **Encoded DRAM Data:** `16'h1A58`
+
+### Read Operation
+
+The controller reads an ECC-encoded value from DRAM, decodes the data, and returns the original user data.
+
+- **Encoded DRAM Data:** `16'h1A58`
+- **Data Returned to CPU:** `8'hAA`
+
+### Single-Bit Error Correction
+
+A single-bit error is intentionally injected into the stored DRAM data to validate the error detection and correction capability of the ECC logic. The controller successfully detects the error, corrects it, and returns the original data.
+
+- **Corrupted DRAM Data:** `16'h1A5C`
+- **Error Status:** Single-bit error detected and corrected
+- **Data Returned to CPU:** `8'hAA`
+
+![Architecture](images/Pre_synthesis_Waveform_Zoooom.png)
+
+---
 
 ## Synthesis Report
 
-![Architecture](images/DDR4_Memory.drawio.png)
-
+![Architecture](images/Summary_Report.png)
+---
 
 ## Maximum Operating Frequency
 
@@ -81,7 +112,7 @@ Beyond **1.85 GHz**, the design begins to violate timing requirements, with nega
 
 **Maximum Stable Operating Frequency:** **1.8 GHz**
 
-
+---
 ## Physical Design Layout
 
-![Architecture](images/DDR4_Memory.drawio.png)
+![Architecture](images/FINAL_Layout.png)
