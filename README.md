@@ -20,7 +20,7 @@ The DDR4 controller has been designed with a set of hardware and functional spec
 
 ## Block Diagram
 
-![Architecture](images/Main-Block-Diagram.png)
+![Architecture](images/BDiagram.png)
 
 ---
 
@@ -87,6 +87,7 @@ A single-bit error is intentionally injected into the stored DRAM data to valida
 ## Synthesis Report
 
 ![Architecture](images/Summary_Report.png)
+
 ---
 
 ## Maximum Operating Frequency
