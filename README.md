@@ -15,3 +15,73 @@ The DDR4 controller has been designed with a set of hardware and functional spec
 - Auto-Precharge command asserted to the memory compulsorily after every Read/Write operation
 - Periodic Memory Refresh performed to maintain DRAM data integrity (Entire memory refreshed at once)
 - As per DDR4 Specification, to support dual data rate, the controller should work on differential clock inputs (CK t, CK c). But, we have implemented a high level DDR4 Memory Controller (commands, timing, refresh, ECC) and considered a single clock for the ease of implementation.
+
+
+## Block Diagram
+
+![Architecture](images/Main-Block-Diagram.png)
+
+
+## Top Module Ports
+
+| Port Name | Width | Type | Description |
+|-----------|--------|--------|-------------|
+| clk | 1 | input | System clock |
+| reset_n | 1 | input | Asynchronous active reset |
+| user_addr | 32 | input | Address bus from CPU |
+| user_read_req | 1 | input | Read request from CPU |
+| user_read | 8 | output | Data read from memory |
+| user_write_req | 1 | input | Write request from CPU |
+| user_write | 8 | input | Data to be written |
+| ddr4_addr | 32 | output | Controller address to Memory |
+| ddr4_bank_group | 1 | output | Bank Group address |
+| ddr4_banks | 2 | output | Bank address |
+| ddr4_dq | 16 | inout | Data bus between Controller and Memory |
+| ddr4_data_strobe | 1 | output | Data strobe signal |
+| ddr4_cs_n | 1 | output | Active-low chip select |
+| ddr4_act_n | 1 | output | Active-low ACTIVATE signal |
+| ecc_single_err | 1 | output | ECC single error detection |
+| ecc_double_err | 1 | output | ECC double error detection |
+| ecc_corrected | 1 | output | ECC single error corrected |
+
+
+## Verilog Modules Flow
+
+![Architecture](images/DDR4_Memory.drawio.png)
+
+## RTL Simulation Waveform
+
+![Architecture](images/DDR4_Memory.drawio.png)
+
+## Synthesis Report
+
+![Architecture](images/DDR4_Memory.drawio.png)
+
+
+## Maximum Operating Frequency
+
+The DDR4 Memory Controller was synthesized for a target frequency of **100 MHz**, where the design exhibits a large positive slack of **+8.9 ns**, indicating good timing margins. To determine the maximum achievable performance, the clock period was progressively reduced and timing was re-evaluated using synthesis timing reports. The slack steadily decreases as the operating frequency increases, approaching marginal values around **1 GHz** and reaching **zero** between **1.25 GHz and 1.8 GHz**. This region represents the timing limit where the critical path delay equals the clock period.
+
+Beyond **1.85 GHz**, the design begins to violate timing requirements, with negative slack values observed and reaching **−32 ps at 2 GHz**. Based on this analysis, the **maximum stable operating frequency** of the DDR4 Memory Controller is approximately **1.8 GHz**.
+
+### Timing Analysis Results
+
+| Clock Frequency (GHz) | Clock Period (ns) | Slack (ps) | Timing Status |
+|----------------------|-------------------|-------------|---------------|
+| 0.20 (200 MHz) | 5.00 | +3212 | Met |
+| 0.10 (100 MHz) | 10.00 | +8921 | Met |
+| 1.00 | 1.00 | +4 | Met (borderline) |
+| 1.25 | 0.80 | 0 | Limit |
+| 1.40 | 0.70 | 0 | Limit |
+| 1.66 | 0.60 | 0 | Limit |
+| **1.80** | **0.55** | **0** | **Max Stable Frequency** |
+| 1.85 | 0.54 | -6 | Violated |
+| 1.92 | 0.52 | -17 | Violated |
+| 2.00 | 0.50 | -32 | Violated |
+
+**Maximum Stable Operating Frequency:** **1.8 GHz**
+
+
+## Physical Design Layout
+
+![Architecture](images/DDR4_Memory.drawio.png)
